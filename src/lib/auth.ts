@@ -7,10 +7,10 @@ import { v4 as uuid } from "uuid";
 export default (
     clientId: string,
     clientSecret: string,
-    redirectUri: string,
-    pool: Pool,
+    authRedirect: string,
     successRedirect: string,
     failureRedirect: string,
+    pool: Pool,
 ) => {
     const router = Router();
     router.get("/", async (req, res, _next) => {
@@ -19,7 +19,7 @@ export default (
                 grant_type: "authorization_code",
                 client_id: clientId,
                 client_secret: clientSecret,
-                redirect_uri: redirectUri,
+                redirect_uri: authRedirect,
                 code: req.query.code,
             }
             const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
@@ -77,7 +77,7 @@ const updateDB = async (pool: Pool, id: string, accessToken: string, refreshToke
             await client.query(`BEGIN`);
             const accountRes = await client.query("SELECT * from accounts WHERE id=$1", [id]);
             if (accountRes.rowCount === 0) {
-                await client.query("INSERT INTO accounts VALUES ($1,$2,$3,$4)", [id, refreshToken, accessToken,(new Date()).getTime()])
+                await client.query("INSERT INTO accounts VALUES ($1,$2,$3,$4,$5)", [id, refreshToken, accessToken,(new Date()).getTime(),(new Date()).getTime()])
             } else if (accountRes.rowCount === 1) {
                 await client.query("UPDATE accounts SET accessToken=$1, refreshToken=$2 WHERE id=$3", [accessToken, refreshToken, id]);
             } else {

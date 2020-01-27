@@ -26,7 +26,8 @@ const sleep = promisify(setTimeout);
             id VARCHAR(32),\
             accessToken VARCHAR(256),\
             refreshToken VARCHAR(256),\
-            lastUpdate VARCHAR(256)\
+            lastUpdate VARCHAR(256),\
+            lastRefresh VARCHAR(256)\
         )");
     await pool.query("\
         CREATE TABLE sessions (\

@@ -3,22 +3,41 @@ import login from "./login";
 import auth from "./auth";
 import pg from "pg";
 
+const {
+  SUCESS_REDIRECT,
+  FAILURE_REDIRECT,
+  AUTH_REDIRECT,
+  CLIENT_ID,
+  CLIENT_SECRET,
+  SCOPES
+} = process.env;
+
+if (!(SUCESS_REDIRECT &&
+  FAILURE_REDIRECT &&
+  AUTH_REDIRECT &&
+  CLIENT_ID &&
+  CLIENT_SECRET &&
+  SCOPES)) {
+  process.stderr.write("Evironment variables not set\n")
+  process.exit(1);
+}
+
 const pool = new pg.Pool();
 
 const app = express();
 
 app.use("/auth", auth(
-  "1080184656423-2ue1gt1t85mhe98mac7nqipqhl2c55d4.apps.googleusercontent.com",
-  "JkuTZwbtATLkIpaYaghB5po2",
-  "http://localhost/auth",
+  CLIENT_ID,
+  CLIENT_SECRET,
+  AUTH_REDIRECT,
+  SUCESS_REDIRECT,
+  FAILURE_REDIRECT,
   pool,
-  "/",
-  "/",
 ));
 app.use("/login", login(
-  "1080184656423-2ue1gt1t85mhe98mac7nqipqhl2c55d4.apps.googleusercontent.com",
-  "openid email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/drive.appdata",
-  "http://localhost/auth",
+  CLIENT_ID,
+  SCOPES,
+  AUTH_REDIRECT,
 ));
 
 app.use((err, _req, res, _next) => {
