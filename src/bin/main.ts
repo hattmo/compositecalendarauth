@@ -29,7 +29,7 @@ function onError(error) {
 
 function onListening() {
     const addr = server.address() as AddressInfo;
-    process.stdout.write(`Listening on port ${addr.port}`);
+    process.stdout.write(`Listening on port ${addr.port}\n`);
 }
 server.on("error", onError);
 server.on("listening", onListening);
