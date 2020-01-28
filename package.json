@@ -10,7 +10,8 @@
         "prepare": "tsc --project .",
         "start": "nodemon -V dist/bin/main.js",
         "startDB": "node ./scripts/startDB",
-        "stopDB": "node ./scripts/stopDB"
+        "stopDB": "node ./scripts/stopDB",
+        "dumpDB": "node ./scripts/dumpDB"
     },
     "files": [
         "/dist/"

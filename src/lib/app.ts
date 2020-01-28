@@ -4,7 +4,7 @@ import auth from "./auth";
 import pg from "pg";
 
 const {
-  SUCESS_REDIRECT,
+  SUCCESS_REDIRECT,
   FAILURE_REDIRECT,
   AUTH_REDIRECT,
   CLIENT_ID,
@@ -12,13 +12,13 @@ const {
   SCOPES
 } = process.env;
 
-if (!(SUCESS_REDIRECT &&
+if (!(SUCCESS_REDIRECT &&
   FAILURE_REDIRECT &&
   AUTH_REDIRECT &&
   CLIENT_ID &&
   CLIENT_SECRET &&
   SCOPES)) {
-  process.stderr.write("Evironment variables not set\n")
+  process.stderr.write("Environment variables not set\n")
   process.exit(1);
 }
 
@@ -30,7 +30,7 @@ app.use("/auth", auth(
   CLIENT_ID,
   CLIENT_SECRET,
   AUTH_REDIRECT,
-  SUCESS_REDIRECT,
+  SUCCESS_REDIRECT,
   FAILURE_REDIRECT,
   pool,
 ));
