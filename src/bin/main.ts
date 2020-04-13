@@ -3,35 +3,74 @@
 import http from "http";
 import app from "../lib/app";
 import { AddressInfo } from "net";
+import db from "../lib/db";
 
+const {
+    SUCCESS_REDIRECT,
+    FAILURE_REDIRECT,
+    AUTH_REDIRECT,
+    OAUTH_CLIENT_ID,
+    OAUTH_CLIENT_SECRET,
+    SCOPES,
+    DB_CONNECTION,
+    DB_USERNAME,
+    DB_PASSWORD,
+    NODEPORT,
+} = process.env;
 
-const port = process.env.NODEPORT ?? 80;
-app.set("port", port);
-const server = http.createServer(app);
+if (!(
+    SUCCESS_REDIRECT &&
+    FAILURE_REDIRECT &&
+    AUTH_REDIRECT &&
+    OAUTH_CLIENT_ID &&
+    OAUTH_CLIENT_SECRET &&
+    SCOPES &&
+    DB_CONNECTION
+)) {
+    process.stderr.write("Environment variables not set\n");
+    process.exit(1);
+}
 
-function onError(error) {
-    if (error.syscall !== "listen") {
-        throw error;
-    }
+const port = NODEPORT ?? 80;
 
-    switch (error.code) {
-        case "EACCES":
-            process.stderr.write(`Port ${port} requires elevated privileges\n`);
-            process.exit(1);
-            break;
-        case "EADDRINUSE":
-            process.stderr.write(`Port ${port} is already in use\n`);
-            process.exit(1);
-            break;
-        default:
+db(DB_CONNECTION, DB_USERNAME, DB_PASSWORD).then((database) => {
+
+    const appInstance = app(
+        OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET,
+        AUTH_REDIRECT, SUCCESS_REDIRECT, FAILURE_REDIRECT, SCOPES,
+        database,
+    );
+    appInstance.set("port", port);
+    const server = http.createServer(appInstance);
+
+    const onError = (error) => {
+        if (error.syscall !== "listen") {
             throw error;
-    }
-}
+        }
 
-function onListening() {
-    const addr = server.address() as AddressInfo;
-    process.stdout.write(`Listening on port ${addr.port}\n`);
-}
-server.on("error", onError);
-server.on("listening", onListening);
-server.listen(port);
+        switch (error.code) {
+            case "EACCES":
+                process.stderr.write(`Port ${port} requires elevated privileges\n`);
+                process.exit(1);
+                break;
+            case "EADDRINUSE":
+                process.stderr.write(`Port ${port} is already in use\n`);
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    };
+
+    const onListening = () => {
+        const addr = server.address() as AddressInfo;
+        process.stdout.write(`Listening on port ${addr.port}\n`);
+    };
+    server.on("error", onError);
+    server.on("listening", onListening);
+    server.listen(port);
+
+}).catch((_e) => {
+    process.stderr.write("Failed to connect to Database, exiting...");
+    process.exit(1);
+});
