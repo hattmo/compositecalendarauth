@@ -29,5 +29,6 @@ Support me with a [donation](https://www.paypal.me/hattmo)!
 
 ### Build
 
-## DB Scema
-
+- GOOGLE_CREDENTIALS
+- DOCKERHUB_USERNAME
+- DOCKERHUB_PASSWORD
