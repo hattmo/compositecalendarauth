@@ -2,7 +2,7 @@
 terraform {
   backend "gcs" {
     bucket = "compositecalendar-tf"
-    prefix = "worker"
+    prefix = "auth"
   }
 }
 
