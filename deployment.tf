@@ -58,16 +58,44 @@ resource "kubernetes_deployment" "app" {
           name  = local.appname
           image = local.imagename
           env {
-            DB_CONNECTION       = data.terraform_remote_state.infrastructure.outputs.db_connection
-            DB_USERNAME         = data.terraform_remote_state.infrastructure.outputs.db_username
-            DB_PASSWORD         = data.terraform_remote_state.infrastructure.outputs.db_password
-            SUCCESS_REDIRECT    = "/"
-            FAILURE_REDIRECT    = "/"
-            AUTH_REDIRECT       = "https://compositecalendar.com/auth"
-            OAUTH_CLIENT_ID     = data.terraform_remote_state.infrastructure.outputs.oauth_client_id
-            OAUTH_CLIENT_SECRET = data.terraform_remote_state.infrastructure.outputs.oauth_client_secret
-            SCOPES              = "openid email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/drive.appdata"
-            NODEPORT            = 80
+            name  = "DB_CONNECTION"
+            value = data.terraform_remote_state.infrastructure.outputs.db_connection
+          }
+          env {
+            name  = "DB_USERNAME"
+            value = data.terraform_remote_state.infrastructure.outputs.db_username
+          }
+          env {
+            name  = "DB_PASSWORD"
+            value = data.terraform_remote_state.infrastructure.outputs.db_password
+          }
+          env {
+            name  = "SUCCESS_REDIRECT"
+            value = "/"
+          }
+          env {
+            name  = "FAILURE_REDIRECT"
+            value = "/"
+          }
+          env {
+            name  = "AUTH_REDIRECT"
+            value = "https://compositecalendar.com/auth"
+          }
+          env {
+            name  = "OAUTH_CLIENT_ID"
+            value = data.terraform_remote_state.infrastructure.outputs.oauth_client_id
+          }
+          env {
+            name  = "OAUTH_CLIENT_SECRET"
+            value = data.terraform_remote_state.infrastructure.outputs.oauth_client_secret
+          }
+          env {
+            name  = "SCOPES"
+            value = "openid email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/drive.appdata"
+          }
+          env {
+            name  = "NODEPORT"
+            value = 80
           }
         }
       }
