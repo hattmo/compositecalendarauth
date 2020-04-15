@@ -9,6 +9,6 @@ override.tf.json
 
 /node_modules/
 /dist/
-/nodemon.json
 
+/nodemon.json
 /setEnv*

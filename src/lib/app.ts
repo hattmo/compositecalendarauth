@@ -1,6 +1,6 @@
 import express from "express";
-import login from "./login";
-import auth from "./auth";
+import login from "./routes/login";
+import auth from "./routes/auth";
 import { IDatabaseModel } from "./db";
 
 export default (
