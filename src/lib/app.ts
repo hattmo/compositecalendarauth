@@ -30,8 +30,15 @@ export default (
     authRedirect,
   ));
 
-  app.use((err, _req, res, _next) => {
+  app.get("/", (_req, res) => {
+    res.sendStatus(200);
+  })
 
+  app.use((_req, _res, next) => {
+    next(404);
+  });
+
+  app.use((err, _req, res, _next) => {
     if (err === 404) {
       res.sendStatus(404);
     } else {
