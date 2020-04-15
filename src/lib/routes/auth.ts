@@ -29,7 +29,7 @@ export default (
                 return db.updateUser(creds.tokens, userinfo.data.email, cookie, req.ip);
             })
         }).then(() => {
-            res.cookie("ccsession", cookie, { httpOnly: true });
+            res.cookie("ccsession", cookie, { httpOnly: true, maxAge: 2700000 });
             res.redirect(successRedirect);
         }).catch((_error) => {
             res.redirect(failureRedirect);
