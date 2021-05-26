@@ -20,7 +20,7 @@
     "main": "dist/lib/app.js",
     "devDependencies": {
         "@types/chai": "^4.2.18",
-        "@types/express": "^4.17.11",
+        "@types/express": "^4.17.12",
         "@types/mocha": "^8.2.2",
         "@types/mongodb": "^3.6.16",
         "@types/node": "^15.6.1",
@@ -35,7 +35,7 @@
     "dependencies": {
         "express": "^4.17.1",
         "google-auth-library": "^7.1.0",
-        "googleapis": "^74.0.0",
+        "googleapis": "^74.1.0",
         "mongodb": "^3.6.8",
         "uuid": "^8.3.2"
     }
